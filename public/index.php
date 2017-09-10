@@ -3,6 +3,7 @@
 use Endpoints\AbstractEndpoint;
 use Endpoints\InvalidDataException;
 use Endpoints\NotificationCreateListenerEndpoint;
+use Endpoints\NotificationRemoveAllListenersByClientIdEndpoint;
 use Endpoints\NotificationRemoveListenerEndpoint;
 use Endpoints\ProjectAddUserEndpoint;
 use Endpoints\ProjectGetProjectsForUserEndpoint;
@@ -19,6 +20,16 @@ require __DIR__ . '/../vendor/autoload.php';
 class EndpointsHandler
 {
 	public $error = null;
+
+	/**
+	 * @var NotificationListenerRepository
+	 */
+	private $notificationListener;
+
+	public function __construct(NotificationListenerRepository $notificationListener)
+	{
+		$this->notificationListener = $notificationListener;
+	}
 
 	public function userCreate($clientId, $name, $email, $isActive)
 	{
@@ -107,7 +118,7 @@ class EndpointsHandler
 
 	public function notificationCreateListener($clientId, $sourceId)
 	{
-		return $this->execute(new NotificationCreateListenerEndpoint(), [
+		return $this->execute(new NotificationCreateListenerEndpoint($this->notificationListener), [
 			'clientId' => $clientId,
 			'sourceId' => $sourceId,
 		]);
@@ -115,9 +126,16 @@ class EndpointsHandler
 
 	public function notificationRemoveListener($clientId, $sourceId)
 	{
-		return $this->execute(new NotificationRemoveListenerEndpoint(), [
+		return $this->execute(new NotificationRemoveListenerEndpoint($this->notificationListener), [
 			'clientId' => $clientId,
 			'sourceId' => $sourceId,
+		]);
+	}
+
+	public function notificationRemoveAllListenersByClientId($clientId)
+	{
+		return $this->execute(new NotificationRemoveAllListenersByClientIdEndpoint($this->notificationListener), [
+			'clientId' => $clientId,
 		]);
 	}
 
@@ -136,7 +154,9 @@ class EndpointsHandler
 
 }
 
-$methods = new EndpointsHandler();
+$methods = new EndpointsHandler(
+	new NotificationListenerRepository('redis', 6379)
+);
 $server = new JsonRpc\Server($methods);
 $server->setObjectsAsArrays();
 $server->receive();

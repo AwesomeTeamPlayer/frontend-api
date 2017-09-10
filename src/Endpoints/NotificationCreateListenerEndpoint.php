@@ -2,7 +2,7 @@
 
 namespace Endpoints;
 
-use NotificationListener;
+use NotificationListenerRepository;
 use Validator\ArrayValidator;
 use Validator\IsNotNullValidator;
 use Validator\IsStringValidator;
@@ -14,9 +14,14 @@ use Validators\ClientIdValidator;
 class NotificationCreateListenerEndpoint extends AbstractEndpoint
 {
 	/**
-	 * @var NotificationListener
+	 * @var NotificationListenerRepository
 	 */
 	private $notificationListener;
+
+	public function __construct(NotificationListenerRepository $notificationListener)
+	{
+		$this->notificationListener = $notificationListener;
+	}
 
 	protected function validate(array $data): ValidationResult
 	{
@@ -43,5 +48,7 @@ class NotificationCreateListenerEndpoint extends AbstractEndpoint
 			$data['clientId'],
 			$data['sourceId']
 		);
+
+		return $data;
 	}
 }

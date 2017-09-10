@@ -6,12 +6,11 @@ use NotificationListenerRepository;
 use Validator\ArrayValidator;
 use Validator\IsNotNullValidator;
 use Validator\IsStringValidator;
-use Validator\StringLengthValidator;
 use Validator\ValidationResult;
 use Validator\ValidatorsCollection;
 use Validators\ClientIdValidator;
 
-class NotificationRemoveListenerEndpoint extends AbstractEndpoint
+class NotificationRemoveAllListenersByClientIdEndpoint extends AbstractEndpoint
 {
 	/**
 	 * @var NotificationListenerRepository
@@ -30,12 +29,7 @@ class NotificationRemoveListenerEndpoint extends AbstractEndpoint
 				new IsNotNullValidator(),
 				new IsStringValidator(),
 				new ClientIdValidator(),
-			]),
-			'sourceId' => new ValidatorsCollection([
-				new IsNotNullValidator(),
-				new IsStringValidator(),
-				new StringLengthValidator(3)
-			]),
+			])
 		];
 
 		$arrayValidator = new ArrayValidator();
@@ -44,9 +38,10 @@ class NotificationRemoveListenerEndpoint extends AbstractEndpoint
 
 	protected function run(array $data)
 	{
-		$this->notificationListener->removeListener(
-			$data['clientId'],
-			$data['sourceId']
+		$this->notificationListener->removeListenerByClientId(
+			$data['clientId']
 		);
+
+		return $data;
 	}
 }
