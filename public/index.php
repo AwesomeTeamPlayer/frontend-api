@@ -2,6 +2,8 @@
 
 use Endpoints\AbstractEndpoint;
 use Endpoints\InvalidDataException;
+use Endpoints\NotificationCreateListenerEndpoint;
+use Endpoints\NotificationRemoveListenerEndpoint;
 use Endpoints\ProjectAddUserEndpoint;
 use Endpoints\ProjectGetProjectsForUserEndpoint;
 use Endpoints\ProjectGetUserForProjectEndpoint;
@@ -100,6 +102,22 @@ class EndpointsHandler
 			'userId' => $userId,
 			'limit' => $limit,
 			'page' => $page,
+		]);
+	}
+
+	public function notificationCreateListener($clientId, $sourceId)
+	{
+		return $this->execute(new NotificationCreateListenerEndpoint(), [
+			'clientId' => $clientId,
+			'sourceId' => $sourceId,
+		]);
+	}
+
+	public function notificationRemoveListener($clientId, $sourceId)
+	{
+		return $this->execute(new NotificationRemoveListenerEndpoint(), [
+			'clientId' => $clientId,
+			'sourceId' => $sourceId,
 		]);
 	}
 
