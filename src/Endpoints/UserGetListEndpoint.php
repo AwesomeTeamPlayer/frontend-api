@@ -10,12 +10,18 @@ use Validator\IsStringValidator;
 use Validator\IsValueFromSetValidator;
 use Validator\ValidationResult;
 use Validator\ValidatorsCollection;
+use Validators\ClientIdValidator;
 
 class UserGetListEndpoint extends AbstractEndpoint
 {
 	protected function validate(array $data): ValidationResult
 	{
 		$validators = [
+			'clientId' => new ValidatorsCollection([
+				new IsNotNullValidator(),
+				new IsStringValidator(),
+				new ClientIdValidator(),
+			]),
 			'orderBy' => new ValidatorsCollection([
 				new IsNotNullValidator(),
 				new IsStringValidator(),

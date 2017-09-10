@@ -10,12 +10,18 @@ use Validator\IsStringValidator;
 use Validator\StringLengthValidator;
 use Validator\ValidationResult;
 use Validator\ValidatorsCollection;
+use Validators\ClientIdValidator;
 
 class UserCreateEndpoint extends AbstractEndpoint
 {
 	protected function validate(array $data): ValidationResult
 	{
 		$validators = [
+			'clientId' => new ValidatorsCollection([
+				new IsNotNullValidator(),
+				new IsStringValidator(),
+				new ClientIdValidator(),
+			]),
 			'name' => new ValidatorsCollection([
 				new IsNotNullValidator(),
 				new IsStringValidator(),
