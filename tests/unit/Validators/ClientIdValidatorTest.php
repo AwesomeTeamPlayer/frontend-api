@@ -34,59 +34,24 @@ class ClientIdValidatorTest extends TestCase
 				'Given value is not correct Client ID.',
 			],
 			[
-				$this->generateString(32),
+				'abc123',
 				ClientIdValidator::CLIENT_ID_IS_NOT_VALID,
 				'Given value is not correct Client ID.',
 			],
 			[
-				$this->generateString(32) . '-1.1.1.1',
+				'abc123-',
 				ClientIdValidator::CLIENT_ID_IS_NOT_VALID,
 				'Given value is not correct Client ID.',
 			],
 			[
-				$this->generateString(32) . '-1.1.1.1-123',
+				'abc123-def',
 				ClientIdValidator::CLIENT_ID_IS_VALID,
 				'Ok',
 			],
 			[
-				$this->generateString(32) . '-abc-1',
+				'abc_123-def_456',
 				ClientIdValidator::CLIENT_ID_IS_VALID,
 				'Ok',
-			],
-			[
-				$this->generateString(32) . '-1.1.1.1-abc',
-				ClientIdValidator::CLIENT_ID_IS_NOT_VALID,
-				'Given value is not correct Client ID.',
-			],
-			[
-				$this->generateString(32) . '-1.1.1.1-' . $this->generateString(100, '1') ,
-				ClientIdValidator::CLIENT_ID_IS_VALID,
-				'Ok',
-			],
-			[
-				$this->generateString(32) . '-192.168.1.1-123',
-				ClientIdValidator::CLIENT_ID_IS_VALID,
-				'Ok',
-			],
-			[
-				$this->generateString(32) . '-1.1.1.1.1-1',
-				ClientIdValidator::CLIENT_ID_IS_NOT_VALID,
-				'Given value is not correct Client ID.',
-			],
-			[
-				$this->generateString(32) . '-192.168.1.257-123',
-				ClientIdValidator::CLIENT_ID_IS_NOT_VALID,
-				'Given value is not correct Client ID.',
-			],
-			[
-				$this->generateString(32) . '-hostName-123',
-				ClientIdValidator::CLIENT_ID_IS_VALID,
-				'Ok',
-			],
-			[
-				$this->generateString(32) . '-incorrectHostNameWithDot.-123',
-				ClientIdValidator::CLIENT_ID_IS_NOT_VALID,
-				'Given value is not correct Client ID.',
 			],
 		];
 	}
