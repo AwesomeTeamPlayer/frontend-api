@@ -2,6 +2,11 @@
 
 use Endpoints\AbstractEndpoint;
 use Endpoints\InvalidDataException;
+use Endpoints\ProjectAddUserEndpoint;
+use Endpoints\ProjectGetProjectsForUserEndpoint;
+use Endpoints\ProjectGetUserForProjectEndpoint;
+use Endpoints\ProjectHasUserAccessEndpoint;
+use Endpoints\ProjectRemoveUserEndpoint;
 use Endpoints\UserCreateEndpoint;
 use Endpoints\UserGetEndpoint;
 use Endpoints\UserGetListEndpoint;
@@ -42,6 +47,48 @@ class EndpointsHandler
 	{
 		return $this->execute(new UserGetListEndpoint(), [
 			'orderBy' => $orderBy,
+			'limit' => $limit,
+			'page' => $page,
+		]);
+	}
+
+	public function projectAddUser($userId, $projectId)
+	{
+		return $this->execute(new ProjectAddUserEndpoint(), [
+			'userId' => $userId,
+			'projectId' => $projectId,
+		]);
+	}
+
+	public function projectRemoveUser($userId, $projectId)
+	{
+		return $this->execute(new ProjectRemoveUserEndpoint(), [
+			'userId' => $userId,
+			'projectId' => $projectId,
+		]);
+	}
+
+	public function projectHasUserAccess($userId, $projectId)
+	{
+		return $this->execute(new ProjectHasUserAccessEndpoint(), [
+			'userId' => $userId,
+			'projectId' => $projectId,
+		]);
+	}
+
+	public function projectGetUsersForProject($projectId, $limit, $page)
+	{
+		return $this->execute(new ProjectGetUserForProjectEndpoint(), [
+			'projectId' => $projectId,
+			'limit' => $limit,
+			'page' => $page,
+		]);
+	}
+
+	public function projectGetProjectsForUser($userId, $limit, $page)
+	{
+		return $this->execute(new ProjectGetProjectsForUserEndpoint(), [
+			'userId' => $userId,
 			'limit' => $limit,
 			'page' => $page,
 		]);
