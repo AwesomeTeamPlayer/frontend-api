@@ -50,8 +50,8 @@ class ClientIdValidatorTest extends TestCase
 			],
 			[
 				$this->generateString(32) . '-abc-1',
-				ClientIdValidator::CLIENT_ID_IS_NOT_VALID,
-				'Given value is not correct Client ID.',
+				ClientIdValidator::CLIENT_ID_IS_VALID,
+				'Ok',
 			],
 			[
 				$this->generateString(32) . '-1.1.1.1-abc',
@@ -75,6 +75,16 @@ class ClientIdValidatorTest extends TestCase
 			],
 			[
 				$this->generateString(32) . '-192.168.1.257-123',
+				ClientIdValidator::CLIENT_ID_IS_NOT_VALID,
+				'Given value is not correct Client ID.',
+			],
+			[
+				$this->generateString(32) . '-hostName-123',
+				ClientIdValidator::CLIENT_ID_IS_VALID,
+				'Ok',
+			],
+			[
+				$this->generateString(32) . '-incorrectHostNameWithDot.-123',
 				ClientIdValidator::CLIENT_ID_IS_NOT_VALID,
 				'Given value is not correct Client ID.',
 			],

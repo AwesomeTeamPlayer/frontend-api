@@ -24,15 +24,22 @@ class ClientIdValidator implements ValidatorInterface
 	 */
 	public function valid($value): int
 	{
-		if (preg_match('/^[a-z0-9]{32}\-([0-9\.]{7,15})\-[0-9]{1,}$/', $value, $out) !== 1) {
+		if (preg_match('/^[a-z0-9]{32}\-([a-zA-Z0-9\.]{1,})\-[0-9]{1,}$/', $value, $out) !== 1) {
 			return self::CLIENT_ID_IS_NOT_VALID;
 		}
 
-		if ($this->validIpAddress($out[1]) === false) {
+		if (strpos($out[1], '.') !== false) {
+			if ($this->validIpAddress($out[1]) === true) {
+				return self::CLIENT_ID_IS_VALID;
+			}
 			return self::CLIENT_ID_IS_NOT_VALID;
 		}
 
-		return self::CLIENT_ID_IS_VALID;
+		if ($this->validHostName($out[1]) === true) {
+			return self::CLIENT_ID_IS_VALID;
+		}
+
+		return self::CLIENT_ID_IS_NOT_VALID;
 	}
 
 	/**
@@ -51,6 +58,20 @@ class ClientIdValidator implements ValidatorInterface
 			if ((int) $part > 256) {
 				return false;
 			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * @param string $hostName
+	 * 
+	 * @return bool
+	 */
+	private function validHostName(string $hostName): bool
+	{
+		if (preg_match('/^[a-zA-Z0-9]{1,}$/', $hostName, $out) !== 1) {
+			return false;
 		}
 
 		return true;
